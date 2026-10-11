@@ -1,0 +1,16 @@
+name: Improvement request
+description: Suggest an improvement to the demo or its maintenance tools.
+title: "[Enhancement]: "
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Describe the problem and how your proposed change helps.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting details
+      description: For research content, link the source and identify the relevant case or metric.
