@@ -1,4 +1,4 @@
-name: Repository checks
+name: Code checks
 
 on:
   push:
@@ -9,38 +9,19 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: checks-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  validate:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /*
-            !/single_method_videos/
-            !/comparison_videos/
-            !/assets/highlights/
-            !/assets/posters/
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Validate data and local links
-        run: python3 scripts/validate.py --tracked-assets
-      - name: Check generated catalog files
-        run: python3 scripts/sync_catalog.py --check
-      - name: Check JavaScript syntax
-        run: |
-          node --check assets/site.js
-          node --check assets/data.js
-      - name: Compile Python sources
-        run: python3 -m compileall -q serve.py scripts tests
-      - name: Test preview server and validators
-        run: python3 -m unittest discover -s tests -v
+      - name: Install method dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check Python syntax
+        run: python -m compileall -q config.py geometry.py sampler.py execution.py controller.py check.py
+      - name: Run CPU sanity check
+        env:
+          JAX_PLATFORMS: cpu
+        run: python check.py

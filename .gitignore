@@ -1,11 +1,11 @@
 __pycache__/
 *.py[cod]
-.pytest_cache/
 .venv/
 .env
 .DS_Store
-node_modules/
-coverage/
-.env.*
-!.env.example
-*.log
+checkpoints/
+data/
+outputs/
+*.safetensors
+*.pt
+*.pth
